@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Train baseline model (run from project root after fetch_data.py)."""
-
 import os
 import sys
 from pathlib import Path

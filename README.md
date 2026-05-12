@@ -10,16 +10,8 @@ The current version separates **completed games** from **future scheduled games*
 
 ![NBA Predictor GUI Screenshot](docs/ss1.png)
 
-Recommended project folder:
 
-```text
-docs/
-  ss1.png
-```
-
-Example:
-
-NBA Predictor GUI Screenshot
+![NBA Predictor GUI Screenshot](docs/ss2.png)
 
 ---
 

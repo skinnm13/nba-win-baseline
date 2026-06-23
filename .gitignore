@@ -4,4 +4,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+web/node_modules/
+web/dist/
 

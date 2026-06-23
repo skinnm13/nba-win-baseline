@@ -1,0 +1,20 @@
+:root {
+  color: #e8eaed;
+  background: #0f1419;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+code {
+  background: #1e2730;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}

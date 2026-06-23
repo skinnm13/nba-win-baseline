@@ -1,8 +1,37 @@
 # NBA Win Baseline Predictor
 
-A small NBA prediction project that downloads historical NBA results, builds pre-game rolling features, trains a logistic regression baseline model, and predicts upcoming matchups through either a command-line interface or a simple GUI.
+A small NBA prediction project that downloads historical NBA results, builds pre-game rolling features, trains a logistic regression baseline model, and serves predictions through a **React web app** (GitHub Pages) or the CLI.
 
-The current version separates **completed games** from **future scheduled games** so the model trains only on games that already have results, while the GUI can still show future matchups for prediction.
+The current version separates **completed games** from **future scheduled games** so the model trains only on games that already have results, while the web UI shows future matchups for prediction.
+
+---
+
+## Web app (React + GitHub Pages)
+
+The interactive UI lives in `web/` and runs entirely in the browser using exported JSON from your trained model.
+
+### Local development
+
+After fetch + train:
+
+```bash
+python scripts/export_web_data.py   # writes web/public/data/*.json
+cd web
+npm install
+npm run dev
+```
+
+Open the URL Vite prints (usually `http://localhost:5173/nba-win-baseline/`).
+
+### Deploy to GitHub Pages
+
+1. In GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**
+2. Commit exported data under `web/public/data/` (required unless `data/` and `artifacts/` are also in the repo)
+3. Push to `main` — the workflow in `.github/workflows/deploy-pages.yml` builds and deploys
+
+Live site URL (default): `https://<username>.github.io/nba-win-baseline/`
+
+To refresh predictions on the site, re-run fetch → train → export, commit the updated JSON, and push.
 
 ---
 
@@ -54,10 +83,8 @@ Future games do not have these values yet, so they should not be used for traini
 - Builds shifted rolling pre-game features
 - Trains a logistic regression baseline model
 - Supports command-line matchup prediction
-- Supports a desktop GUI through Tkinter
-- Supports a browser GUI fallback
-- Loads upcoming games from `data/prediction_games.csv`
-- Falls back to NBA ScoreboardV2 if the prediction schedule is missing or empty
+- **React web UI** with upcoming schedule + custom matchups (GitHub Pages)
+- Loads upcoming games from exported `prediction_games.json`
 
 ---
 
@@ -65,27 +92,26 @@ Future games do not have these values yet, so they should not be used for traini
 
 ```text
 nba-win-baseline/
+├── .github/workflows/deploy-pages.yml
 ├── artifacts/
 │   └── baseline_logreg.pkl
 ├── data/
 │   ├── games.csv
 │   ├── prediction_games.csv
-│   ├── schedule.csv
-│   ├── raw_team_games.csv
-│   └── raw_schedule.csv
+│   └── schedule.csv
 ├── docs/
-│   └── app-screenshot.png
+├── scripts/
+│   └── export_web_data.py
 ├── src/
 │   ├── fetch_games.py
 │   ├── features.py
-│   ├── predict_gui_core.py
-│   ├── scoreboard_schedule.py
 │   └── train_baseline.py
+├── web/                         React app (GitHub Pages)
+│   ├── public/data/             exported JSON (commit for deploy)
+│   └── src/
 ├── fetch_data.py
 ├── train.py
 ├── predict.py
-├── predict_gui.py
-├── predict_gui_web.py
 ├── requirements.txt
 └── README.md
 ```
@@ -96,13 +122,8 @@ nba-win-baseline/
 | `fetch_data.py`                 | Entry point for fetching NBA data                          |
 | `train.py`                      | Entry point for training the model                         |
 | `predict.py`                    | CLI prediction for one matchup                             |
-| `predict_gui.py`                | Desktop GUI                                                |
-| `predict_gui_web.py`            | Browser GUI fallback                                       |
-| `src/fetch_games.py`            | Fetches and normalizes completed games and scheduled games |
-| `src/features.py`               | Builds rolling pre-game features                           |
-| `src/train_baseline.py`         | Trains and evaluates the baseline model                    |
-| `src/predict_gui_core.py`       | Shared prediction GUI logic                                |
-| `src/scoreboard_schedule.py`    | ScoreboardV2 fallback schedule fetcher                     |
+| `scripts/export_web_data.py`    | Export model + CSVs → `web/public/data/*.json`             |
+| `web/`                          | React UI (schedule + predictions, deploys to GitHub Pages) |
 | `data/games.csv`                | Completed games only                                       |
 | `data/prediction_games.csv`     | Future games only                                          |
 | `data/schedule.csv`             | Full normalized schedule                                   |
@@ -187,7 +208,14 @@ and creates:
 artifacts/baseline_logreg.pkl
 ```
 
-### 3. Predict One Custom Matchup
+### 4. Export for the web app
+
+```bash
+python scripts/export_web_data.py
+cd web && npm install && npm run dev
+```
+
+### 5. Predict one custom matchup (CLI)
 
 ```bash
 python predict.py --home Lakers --away Thunder --game-date 2026-05-20
@@ -197,18 +225,6 @@ Example with abbreviations:
 
 ```bash
 python predict.py --home BOS --away NYK --game-date 2026-05-15
-```
-
-### 4. Run the GUI
-
-```bash
-python predict_gui.py
-```
-
-If Tkinter is unavailable, run the browser GUI:
-
-```bash
-python predict_gui_web.py
 ```
 
 ---
@@ -255,9 +271,8 @@ This file contains future or unplayed scheduled games.
 It is used by:
 
 ```text
-predict_gui.py
-predict_gui_web.py
-src/predict_gui_core.py
+web/ (via exported prediction_games.json)
+predict.py (CLI)
 ```
 
 Typical columns:
@@ -336,29 +351,25 @@ The synthetic prediction row is created only in memory. It is not written back t
 
 ---
 
-## GUI Behavior
+## Web UI Behavior
 
-The GUI loads upcoming games using this priority:
-
-```text
-1. data/prediction_games.csv
-2. NBA ScoreboardV2 fallback
-```
-
-The preferred flow is:
+The React app loads static JSON from `web/public/data/`:
 
 ```text
-fetch_data.py
-    -> creates prediction_games.csv
-
-predict_gui.py
-    -> loads prediction_games.csv
-    -> displays upcoming games
-    -> user selects games
-    -> predict_matchup() scores selected games
+games.json              completed games (feature history)
+prediction_games.json   upcoming schedule
+model.json              scaler + logistic regression weights
+teams.json              team names for display / input resolution
 ```
 
-If `prediction_games.csv` is missing or empty, the GUI attempts to use the ScoreboardV2 fallback for near-term games.
+Flow:
+
+```text
+fetch_data.py → train.py → scripts/export_web_data.py → web/public/data/
+npm run dev / GitHub Pages deploy → browser loads JSON → predict in TypeScript
+```
+
+The web app uses the same feature logic and model weights as `predict.py`, aligned with the train/test split (`testSeasonId` shown in the UI header).
 
 ---
 
@@ -388,6 +399,12 @@ Useful flags:
 python train.py
 ```
 
+### Export for web
+
+```bash
+python scripts/export_web_data.py
+```
+
 ### Predict CLI
 
 ```bash
@@ -401,16 +418,11 @@ python predict.py --home Lakers --away Thunder --game-date 2026-05-20
 python predict.py --home BOS --away NYK --game-date 2026-05-15
 ```
 
-### Desktop GUI
+### Web app
 
 ```bash
-python predict_gui.py
-```
-
-### Browser GUI
-
-```bash
-python predict_gui_web.py
+python scripts/export_web_data.py
+cd web && npm install && npm run dev
 ```
 
 ---
@@ -587,7 +599,7 @@ python -c "import pandas as pd; df=pd.read_csv('data/prediction_games.csv'); pri
 
 If it is empty, rerun the fetch command.
 
-If it has rows but the GUI is empty, make sure `src/predict_gui_core.py` is loading `prediction_games.csv` before ScoreboardV2.
+If it has rows but the web app schedule is empty, re-run `python scripts/export_web_data.py` and refresh. Check the **Days ahead** filter in the UI.
 
 ---
 
@@ -620,10 +632,11 @@ You need to train the model first.
 python train.py
 ```
 
-Then rerun:
+Then re-export and open the web app:
 
 ```bash
-python predict_gui.py
+python scripts/export_web_data.py
+cd web && npm run dev
 ```
 
 ---
@@ -644,25 +657,15 @@ python train.py
 
 ---
 
-### 10. Tkinter is missing
+### 10. Web app shows “Failed to load …”
 
-If `predict_gui.py` cannot open the desktop GUI, use the browser version:
-
-```bash
-python predict_gui_web.py
-```
-
-On macOS with Homebrew Python, you may need:
+Run the export step after fetch + train:
 
 ```bash
-brew install python-tk
+python scripts/export_web_data.py
 ```
 
-or a version-specific package such as:
-
-```bash
-brew install python-tk@3.14
-```
+Commit `web/public/data/*.json` if deploying via GitHub Pages without committing `data/`.
 
 ---
 
@@ -718,7 +721,7 @@ Good:
 
 ```text
 games.csv -> train.py
-prediction_games.csv -> predict_gui.py
+prediction_games.csv -> scripts/export_web_data.py -> web app
 ```
 
 Bad:
@@ -778,20 +781,11 @@ python predict.py --home BOS --away NYK --game-date 2026-05-15
 ## Current End-to-End Flow
 
 ```text
-python fetch_data.py
-    -> data/games.csv
-    -> data/prediction_games.csv
-    -> data/schedule.csv
-
-python train.py
-    -> artifacts/baseline_logreg.pkl
-
-python predict_gui.py
-    -> loads data/prediction_games.csv
-    -> scores selected games using predict_matchup()
-
-python predict.py
-    -> scores one custom matchup from CLI
+python fetch_data.py → data/games.csv, data/prediction_games.csv
+python train.py → artifacts/baseline_logreg.pkl
+python scripts/export_web_data.py → web/public/data/*.json
+web app (npm run dev or GitHub Pages) → scores selected / custom games
+python predict.py → scores one custom matchup from CLI
 ```
 
 ---

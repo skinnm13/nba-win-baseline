@@ -1,0 +1,150 @@
+.app {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  margin: 0 0 1.25rem;
+  color: #9aa0a6;
+}
+
+.panel {
+  background: #161b22;
+  border: 1px solid #2d333b;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: end;
+  margin-bottom: 0.75rem;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #9aa0a6;
+}
+
+.controls input[type="number"] {
+  width: 4.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #0f1419;
+  color: inherit;
+}
+
+.checkbox {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.45rem !important;
+  padding-bottom: 0.35rem;
+}
+
+button {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #3d7eff;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.schedule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.schedule li label {
+  display: grid;
+  grid-template-columns: auto 6.5rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid #222831;
+  cursor: pointer;
+}
+
+.schedule li:last-child label {
+  border-bottom: none;
+}
+
+.date {
+  color: #9aa0a6;
+  font-variant-numeric: tabular-nums;
+}
+
+.matchup {
+  font-weight: 600;
+}
+
+.status {
+  color: #9aa0a6;
+  font-size: 0.85rem;
+}
+
+.custom-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: end;
+}
+
+.custom-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #9aa0a6;
+}
+
+.custom-form input {
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #0f1419;
+  color: inherit;
+  min-width: 6rem;
+}
+
+.output pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.9rem;
+  background: #0f1419;
+  border-radius: 8px;
+  padding: 0.75rem;
+  overflow: auto;
+}
+
+.error {
+  color: #f87171;
+}
+
+.muted {
+  color: #9aa0a6;
+}
+
+h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}

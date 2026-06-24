@@ -23,7 +23,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
+      - name: Fetch training data and train model
+        run: |
+          python -m pip install -q pandas nba_api scikit-learn numpy
+          python scripts/fetch_data.py
+          python scripts/train.py
       - name: Export web data (if local CSV + model exist)
         run: |
           python -m pip install -q pandas nba_api scikit-learn numpy

@@ -1,7 +1,21 @@
 :root {
-  color: #e8eaed;
-  background: #0f1419;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --orange: #f97316;
+  --orange-dim: #c2601a;
+  --gold: #f59e0b;
+  --bg: #0a0b0e;
+  --surface: #13161d;
+  --surface-2: #1b1f2a;
+  --border: #2a2f3d;
+  --border-accent: #f9731640;
+  --text: #e8eaed;
+  --text-muted: #6b7280;
+  --text-dim: #9aa0a6;
+  --green: #22c55e;
+  --red: #ef4444;
+
+  color: var(--text);
+  background: var(--bg);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.5;
 }
 
@@ -11,10 +25,16 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -10%, #f9731608 0%, transparent 70%),
+    var(--bg);
 }
 
 code {
-  background: #1e2730;
+  background: var(--surface-2);
+  color: var(--orange);
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
+  font-size: 0.88em;
 }

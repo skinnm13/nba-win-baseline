@@ -94,7 +94,10 @@ function App() {
   if (error) {
     return (
       <main className="app">
-        <h1>NBA Win Baseline</h1>
+        <header>
+          <span className="header-icon">🏀</span>
+          <h1>NBA Win Baseline</h1>
+        </header>
         <p className="error">{error}</p>
         <p>
           From the project root run: <code>python fetch_data.py</code>, <code>python train.py</code>, then{" "}
@@ -115,14 +118,16 @@ function App() {
   return (
     <main className="app">
       <header>
+        <span className="header-icon">🏀</span>
         <h1>NBA Win Baseline</h1>
         <p className="subtitle">
-          Trained on {data.meta.gamesCount.toLocaleString()} completed games · test holdout{" "}
+          Trained on {data.meta.gamesCount.toLocaleString()} games &nbsp;·&nbsp; holdout season{" "}
           {data.meta.testSeasonId ?? data.model.testSeasonId ?? "—"}
         </p>
       </header>
 
       <section className="panel">
+        <h2>Upcoming Games</h2>
         <div className="controls">
           <label>
             Days ahead
@@ -168,7 +173,7 @@ function App() {
       </section>
 
       <section className="panel">
-        <h2>Custom matchup</h2>
+        <h2>Custom Matchup</h2>
         <form className="custom-form" onSubmit={onPredictCustom}>
           <label>
             Away
@@ -187,7 +192,7 @@ function App() {
       </section>
 
       <section className="panel output">
-        <h2>Output</h2>
+        <h2>Predictions</h2>
         <pre>{log.length ? log.join("\n\n") : "(no predictions yet)"}</pre>
       </section>
     </main>

@@ -1,73 +1,173 @@
+/* ── Layout ─────────────────────────────────────────── */
 .app {
-  max-width: 52rem;
+  max-width: 54rem;
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+header {
+  margin-bottom: 1.75rem;
+  text-align: center;
+  position: relative;
+}
+
+header::after {
+  content: "";
+  display: block;
+  margin: 1rem auto 0;
+  width: 4rem;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  border-radius: 2px;
+}
+
+.header-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.4rem;
+  filter: drop-shadow(0 0 12px #f9731660);
 }
 
 header h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.75rem;
+  margin: 0 0 0.3rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 30%, var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
-  margin: 0 0 1.25rem;
-  color: #9aa0a6;
+  margin: 0.4rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
 }
 
+/* ── Panel ─────────────────────────────────────────── */
 .panel {
-  background: #161b22;
-  border: 1px solid #2d333b;
-  border-radius: 10px;
-  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
   margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
 }
 
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange-dim), transparent);
+}
+
+.panel h2 {
+  margin: 0 0 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+/* ── Controls ─────────────────────────────────────── */
 .controls {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
-  align-items: end;
-  margin-bottom: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
 }
 
-.controls label {
+.controls label,
+.custom-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-  color: #9aa0a6;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.controls input[type="number"],
+.custom-form input[type="text"],
+.custom-form input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.15s;
 }
 
 .controls input[type="number"] {
-  width: 4.5rem;
-  padding: 0.4rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background: #0f1419;
-  color: inherit;
+  width: 5rem;
+}
+
+.custom-form input {
+  min-width: 6.5rem;
+}
+
+.controls input:focus,
+.custom-form input:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px var(--border-accent);
 }
 
 .checkbox {
   flex-direction: row !important;
   align-items: center;
-  gap: 0.45rem !important;
+  gap: 0.5rem !important;
   padding-bottom: 0.35rem;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
 }
 
-button {
-  padding: 0.45rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid #3d7eff;
-  background: #2563eb;
-  color: white;
+.checkbox input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--orange);
   cursor: pointer;
-  font-weight: 600;
+}
+
+/* ── Buttons ─────────────────────────────────────── */
+button {
+  padding: 0.5rem 1.1rem;
+  border-radius: 7px;
+  border: 1px solid var(--orange);
+  background: linear-gradient(135deg, #ea6a10, #f97316);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: filter 0.15s, transform 0.1s;
 }
 
 button:hover {
-  background: #1d4ed8;
+  filter: brightness(1.15);
+  transform: translateY(-1px);
 }
 
+button:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+/* ── Schedule ─────────────────────────────────────── */
 .schedule {
   list-style: none;
   margin: 0;
@@ -76,75 +176,83 @@ button:hover {
 
 .schedule li label {
   display: grid;
-  grid-template-columns: auto 6.5rem 1fr auto;
+  grid-template-columns: auto 7rem 1fr auto;
   gap: 0.75rem;
   align-items: center;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid #222831;
+  padding: 0.6rem 0.5rem;
+  border-radius: 7px;
   cursor: pointer;
+  transition: background 0.12s;
 }
 
-.schedule li:last-child label {
-  border-bottom: none;
+.schedule li label:hover {
+  background: var(--surface-2);
+}
+
+.schedule li:not(:last-child) label {
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+
+.schedule li label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--orange);
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .date {
-  color: #9aa0a6;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }
 
 .matchup {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.97rem;
+  letter-spacing: 0.04em;
 }
 
 .status {
-  color: #9aa0a6;
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  text-align: right;
 }
 
+/* ── Custom form ──────────────────────────────────── */
 .custom-form {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
-  align-items: end;
+  align-items: flex-end;
 }
 
-.custom-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-  color: #9aa0a6;
-}
-
-.custom-form input {
-  padding: 0.4rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background: #0f1419;
-  color: inherit;
-  min-width: 6rem;
+/* ── Output / scoreboard ──────────────────────────── */
+.output {
+  background: #0d1017;
+  border-color: var(--border);
 }
 
 .output pre {
   margin: 0;
   white-space: pre-wrap;
-  font-size: 0.9rem;
-  background: #0f1419;
-  border-radius: 8px;
-  padding: 0.75rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  background: transparent;
+  color: var(--text-dim);
   overflow: auto;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
 }
 
+/* ── States ──────────────────────────────────────── */
 .error {
-  color: #f87171;
+  color: var(--red);
+  font-weight: 600;
 }
 
 .muted {
-  color: #9aa0a6;
-}
-
-h2 {
-  margin: 0 0 0.75rem;
-  font-size: 1.05rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
